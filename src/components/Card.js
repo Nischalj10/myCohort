@@ -5,7 +5,7 @@ const Card = (props) => {
     const {name} = props;
 
     return <div style={styles.container}>
-        <text style={styles.text}>{name}</text>
+        <span style={styles.text}>{name}</span>
     </div>
 }
 

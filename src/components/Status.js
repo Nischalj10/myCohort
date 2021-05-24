@@ -1,37 +1,80 @@
-import React, {useState} from "react";
+import React, { useState} from "react";
+import {useSelector, useDispatch} from "react-redux";
 import {PlusOutlined, EllipsisOutlined} from '@ant-design/icons'
 import Card from "./Card";
 import {Button} from "antd";
+import TaskAdd from "./TaskAdd";
+import {v4 as uuidv4} from 'uuid'
+import {toast} from "react-toastify";
 
 const Status = (props) => {
 
-    const [noOfTasks, setNoOfTasks] = useState(0)
+    const {tasks} = useSelector((state) => ({...state}))
+    const dispatch = useDispatch();
+    let noOfTasks = 0;
+    const [showModal, setShowModal] = useState(false)
+    const [taskName, setTaskName] = useState('')
+
+
+    const handleClose = () => {
+        if(taskName) {
+            noOfTasks = noOfTasks+1;
+            dispatch({
+                type : "ADD_TASK",
+                payload : {
+                    taskName,
+                    status : props.status,
+                    id : uuidv4(),
+                }
+            })
+            setTaskName('');
+            setShowModal( false);
+        }
+        else {
+            setTaskName('')
+            setShowModal( false);
+            toast.info('Uh oh! Task not added')
+        }
+    }
 
     const addTask = () => {
+        setShowModal(true)
+        setShowModal((state) => {
+            console.log(state)
+            return state;
+        })
+    }
 
+    const none = () => {
+        toast.info('Feature to be added soon!')
     }
 
     return <div style={styles.container}>
         <div style={styles.header}>
+            {console.log("PROPS", props.color, props.status)}
             <span style={{...styles.status, backgroundColor : props.color}}> {props.status}</span>
-            <span style={styles.no}>{noOfTasks}</span>
+            {/*<span style={styles.no}>{noOfTasks}</span>*/}
 
             <div style={styles.buttonContainer}>
-                <Button type={"text"}><EllipsisOutlined style={{color: 'grey'}}/></Button>
-                <Button type={"text"} onClick={addTask}><PlusOutlined style={{color: 'grey'}}/></Button>
+                <Button onClick={none} type={"text"}><EllipsisOutlined style={{color: 'grey'}}/></Button>
+                <Button onClick={none} type={"text"}><PlusOutlined style={{color: 'grey'}}/></Button>
             </div>
 
         </div>
         <div>
-            <Card name={"Demo"}/>
-            <Card name={"This"}/>
-            <Card name={"That"}/>
+            {tasks && tasks.tasks.map((item, index) => {
+                if (item.tasksName === '') return <div></div>;
+                else if (item.status !== props.status) return <div> </div>;
+                else return <Card name={item.name}/>
+
+            })}
         </div>
 
-        <Button type={"text"}>
-            <span><PlusOutlined style={{color: 'grey'}}/></span>
-            <span style={{color : 'grey'}}>&nbsp;New</span>
+        <Button onClick={addTask} type={"text"} style={{alignItems : 'center', justifyContent :'center'}}>
+            <span style={{color : 'grey', marginLeft : -11, fontWeight : 'bold'}}>Add Task</span>
         </Button>
+
+        {showModal && <TaskAdd show={showModal} close={handleClose} name={taskName} setName={setTaskName}/>}
 
     </div>
 }
@@ -40,17 +83,19 @@ const styles = {
     container : {
         width : 300,
         elevation : 10,
-        margin : 20,
+        margin: 20,
 
     },
     header : {
         width: 300,
+        display: 'flex',
         flexDirection : 'row',
         alignItems : 'center',
+        justifyContent :'space-between',
     },
     buttonContainer : {
-        display : 'inline',
-        marginLeft: 110,
+        display : 'inline-block',
+        marginTop : 10,
     },
     status : {
         borderRadius : 10,
