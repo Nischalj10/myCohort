@@ -18,7 +18,7 @@ const Status = (props) => {
 
     const handleClose = () => {
         if(taskName) {
-            noOfTasks = noOfTasks+1;
+            //noOfTasks = noOfTasks+1;
             dispatch({
                 type : "ADD_TASK",
                 payload : {
@@ -29,6 +29,10 @@ const Status = (props) => {
             })
             setTaskName('');
             setShowModal( false);
+            if(typeof Window !== undefined) {
+                //work to do
+                localStorage.setItem('tasks', tasks)
+            }
         }
         else {
             setTaskName('')
@@ -51,10 +55,11 @@ const Status = (props) => {
 
     return <div style={styles.container}>
         <div style={styles.header}>
-            {console.log("PROPS", props.color, props.status)}
+            {/*{console.log("PROPS", props.color, props.status)}*/}
+            <div>
             <span style={{...styles.status, backgroundColor : props.color}}> {props.status}</span>
-            {/*<span style={styles.no}>{noOfTasks}</span>*/}
-
+            <span style={styles.no}>{tasks.tasks.length - 1}</span>
+            </div>
             <div style={styles.buttonContainer}>
                 <Button onClick={none} type={"text"}><EllipsisOutlined style={{color: 'grey'}}/></Button>
                 <Button onClick={none} type={"text"}><PlusOutlined style={{color: 'grey'}}/></Button>
@@ -65,8 +70,7 @@ const Status = (props) => {
             {tasks && tasks.tasks.map((item, index) => {
                 if (item.tasksName === '') return <div></div>;
                 else if (item.status !== props.status) return <div> </div>;
-                else return <Card name={item.name}/>
-
+                else return <Card name={item.name} id={item.id}/>
             })}
         </div>
 
@@ -105,7 +109,7 @@ const styles = {
         fontSize : 13,
     },
     no : {
-        marginLeft : 5,
+        marginLeft : 15,
         color : 'grey',
         fontSize: 20,
     }

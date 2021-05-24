@@ -31,6 +31,10 @@ const Home = (props) => {
             setStatusName('')
             setLabelColor('')
             setShowModal(false)
+            if(typeof Window !== undefined) {
+                //work to do
+                localStorage.setItem('status', JSON.stringify(status))
+            }
         }
         else {
             setStatusName('')
