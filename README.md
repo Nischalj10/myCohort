@@ -12,7 +12,7 @@ This project has also been deployed on netlify - https://notionboard.netlify.app
 
 **Project Image**
 
-![Image](https://drive.google.com/file/d/1QtKA2ZQYzw8c6AmDUWg065_0Nkk_yPlE/view?usp=sharing)
+![Image](https://res.cloudinary.com/idean/image/upload/v1621878574/Notion-1_h3ct3a.png)
 
 Checkout my another fabulous build at - https://nischal-ecommerce-frontend.herokuapp.com
 
